@@ -36,6 +36,28 @@ TEST(Ring_Topology_MPI, send_data_from_process_0_to_process_3) {
   }
 }
 
+TEST(Ring_Topology_MPI, send_data_from_process_0_to_process_4) {
+  int size;
+  int rank;
+  MPI_Comm_size(MPI_COMM_WORLD, &size);
+  if (size < 5) {
+    ASSERT_TRUE(true);
+    return;
+  }
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+  MPI_Comm ring = getRingTopology(MPI_COMM_WORLD);
+  if (rank == 0) {
+    char data = 'a';
+    MPI_Send(&data, 1, MPI_CHAR, 4, 0, ring);
+  }
+  if (rank == 2) {
+    char recv_data;
+    MPI_Status status;
+    MPI_Recv(&recv_data, 1, MPI_CHAR, 0, 0, ring, &status);
+    ASSERT_EQ(recv_data, 'a');
+  }
+}
+
 TEST(Ring_Topology_MPI, send_data_from_the_last_process_to_process_0) {
   int size;
   int rank;
