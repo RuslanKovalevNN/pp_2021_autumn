@@ -52,7 +52,8 @@ int getParallelOperations(std::string first_string, std::string second_string) {
   }
 
   if (first_string.length() % size != 0) {
-    for (int i = 0; i < size - first_string.length() % size; i++) {
+    for (int i = 0;
+      i < size -static_cast<int>(first_string.length() % size); i++) {
       first_string += "3";
       second_string += "3";
     }
